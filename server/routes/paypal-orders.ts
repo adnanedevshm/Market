@@ -28,6 +28,7 @@ async function getPayPalAccessToken(): Promise<string | null> {
       headers: {
         'Accept': 'application/json',
         'Accept-Language': 'en_US',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': `Basic ${Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString('base64')}`,
       },
       body: 'grant_type=client_credentials',
