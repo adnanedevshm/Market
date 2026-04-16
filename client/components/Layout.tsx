@@ -292,35 +292,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="border-t border-gray-700 pt-8">
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-center">
-              <div>
-                <p className="text-2xl font-bold text-blue-400">1000+</p>
-                <p className="text-gray-400 text-xs">منتج</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-green-400">5000+</p>
-                <p className="text-gray-400 text-xs">عميل</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-yellow-400">24/7</p>
-                <p className="text-gray-400 text-xs">دعم</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-red-400">100%</p>
-                <p className="text-gray-400 text-xs">آمن</p>
-              </div>
-            </div>
-
-            {/* Copyright */}
-            <div className="text-center text-gray-400 text-sm">
-              <p>&copy; 2024 SHM Marketplace. جميع الحقوق محفوظة.</p>
-              <p className="mt-2 text-xs">
-                تم التطوير بـ ❤️ بواسطة فريق SHM
-              </p>
-            </div>
+          {/* Copyright */}
+          <div className="text-center text-gray-400 text-sm">
+            <p>&copy; 2024 SHM Marketplace. جميع الحقوق محفوظة.</p>
+            <p className="mt-2 text-xs">
+              تم التطوير بـ ❤️ بواسطة فريق SHM
+            </p>
           </div>
         </div>
       </footer>
