@@ -67,7 +67,19 @@ export default function ProductDetail() {
         }
       } catch (err) {
         console.error("Error loading product:", err);
-        setError("Erreur lors du chargement du produit");
+
+        // Extract error message
+        let errorMessage = "Erreur lors du chargement du produit";
+        if (err instanceof Error) {
+          errorMessage = err.message;
+        } else if (typeof err === 'object' && err !== null) {
+          const errObj = err as any;
+          if (errObj.message) {
+            errorMessage = errObj.message;
+          }
+        }
+
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

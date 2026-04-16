@@ -1,8 +1,10 @@
 /**
  * Product Service - Handles all product-related operations with Supabase
+ * Includes fallback to mock products for simple string IDs
  */
 
 import { supabase } from '@/lib/supabase';
+import { getMockProduct } from '@/data/mockProducts';
 import type { Product, ProductDetail, Variant, Pattern } from '@/types';
 
 /**
@@ -35,12 +37,13 @@ export async function getProducts(category?: string): Promise<Product[]> {
 
 /**
  * Fetch a single product with its variants and patterns
+ * Falls back to mock products if not found in Supabase
  */
 export async function getProductById(productId: string): Promise<ProductDetail | null> {
   try {
     console.log(`🔍 Recherche du produit ${productId} dans Supabase...`);
 
-    // Fetch product
+    // Fetch product from Supabase
     const { data: product, error: productError } = await supabase
       .from('products')
       .select('*')
@@ -48,51 +51,63 @@ export async function getProductById(productId: string): Promise<ProductDetail |
       .eq('is_active', true)
       .single();
 
-    if (productError) {
-      console.error('❌ Erreur Supabase:', {
-        code: productError.code,
-        message: productError.message,
-        details: productError.details,
-        hint: productError.hint,
-      });
-      throw new Error(`Supabase Error: ${productError.message}`);
+    // If product found in Supabase, use it
+    if (!productError && product) {
+      console.log(`✅ Produit trouvé dans Supabase:`, product);
+
+      // Fetch variants
+      const { data: variants = [], error: variantsError } = await supabase
+        .from('variants')
+        .select('*')
+        .eq('product_id', productId);
+
+      if (variantsError) {
+        console.warn('⚠️ Erreur lors du chargement des variantes:', variantsError);
+      }
+
+      // Fetch patterns
+      const { data: patterns = [], error: patternsError } = await supabase
+        .from('patterns')
+        .select('*');
+
+      if (patternsError) {
+        console.warn('⚠️ Erreur lors du chargement des motifs:', patternsError);
+      }
+
+      return {
+        ...product,
+        variants: variants as Variant[],
+        patterns: patterns as Pattern[],
+      } as ProductDetail;
     }
 
-    if (!product) {
-      console.error(`❌ Produit non trouvé: ${productId}`);
-      throw new Error(`Produit avec l'ID "${productId}" n'existe pas`);
+    // If product not found in Supabase, try mock products
+    console.warn(`⚠️ Produit non trouvé dans Supabase: ${productId}`);
+    console.log(`🔄 Utilisation des données mockées pour ${productId}...`);
+
+    const mockProduct = getMockProduct(productId);
+    if (mockProduct) {
+      console.log(`✅ Produit mock trouvé:`, mockProduct);
+      return mockProduct;
     }
 
-    console.log(`✅ Produit trouvé:`, product);
-
-    // Fetch variants
-    const { data: variants = [], error: variantsError } = await supabase
-      .from('variants')
-      .select('*')
-      .eq('product_id', productId);
-
-    if (variantsError) {
-      console.warn('⚠️ Erreur lors du chargement des variantes:', variantsError);
-    }
-
-    // Fetch patterns
-    const { data: patterns = [], error: patternsError } = await supabase
-      .from('patterns')
-      .select('*');
-
-    if (patternsError) {
-      console.warn('⚠️ Erreur lors du chargement des motifs:', patternsError);
-    }
-
-    return {
-      ...product,
-      variants: variants as Variant[],
-      patterns: patterns as Pattern[],
-    } as ProductDetail;
+    // No product found anywhere
+    console.error(`❌ Produit non trouvé: ${productId} (Supabase ni mock)`);
+    return null;
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     console.error('❌ Erreur lors du chargement du produit:', errorMsg);
-    throw error; // Propagate error with context
+
+    // Try fallback to mock product on error
+    console.log(`🔄 Fallback aux données mockées après erreur...`);
+    const mockProduct = getMockProduct(productId);
+    if (mockProduct) {
+      console.log(`✅ Fallback réussi, utilisation du produit mock:`, mockProduct);
+      return mockProduct;
+    }
+
+    // If mock also fails, return null
+    return null;
   }
 }
 

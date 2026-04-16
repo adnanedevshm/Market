@@ -81,10 +81,10 @@ export default function ProductDetailFull() {
 
         console.log("📦 Chargement du produit:", id);
 
-        // Fetch product data
+        // Fetch product data (with fallback to mock)
         const productData = await getProductById(id);
         if (!productData) {
-          throw new Error(`Produit avec l'ID "${id}" non trouvé dans la base de données`);
+          throw new Error(`Produit "${id}" non trouvé`);
         }
 
         setProduct(productData);
