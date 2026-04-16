@@ -84,27 +84,35 @@ export default function ProductDetailFull() {
         // Fetch product data
         const productData = await getProductById(id);
         if (!productData) {
-          throw new Error("Produit non trouvé");
+          throw new Error(`Produit avec l'ID "${id}" non trouvé dans la base de données`);
         }
 
         setProduct(productData);
 
-        // Fetch product images
-        const { data: imagesData } = await fetch(
-          `/api/products/${id}/images`
-        ).then((r) => r.json());
-
-        if (imagesData) {
-          setImages(imagesData);
+        // Try to fetch product images (non-blocking)
+        try {
+          const imagesResponse = await fetch(`/api/products/${id}/images`);
+          if (imagesResponse.ok) {
+            const imagesJson = await imagesResponse.json();
+            if (imagesJson.data) {
+              setImages(imagesJson.data);
+            }
+          }
+        } catch (imgErr) {
+          console.warn("⚠️ Impossible de charger les images:", imgErr);
         }
 
-        // Fetch product reviews
-        const { data: reviewsData } = await fetch(
-          `/api/products/${id}/reviews`
-        ).then((r) => r.json());
-
-        if (reviewsData) {
-          setReviews(reviewsData);
+        // Try to fetch product reviews (non-blocking)
+        try {
+          const reviewsResponse = await fetch(`/api/products/${id}/reviews`);
+          if (reviewsResponse.ok) {
+            const reviewsJson = await reviewsResponse.json();
+            if (reviewsJson.data) {
+              setReviews(reviewsJson.data);
+            }
+          }
+        } catch (revErr) {
+          console.warn("⚠️ Impossible de charger les avis:", revErr);
         }
 
         // Set initial dynamic price
@@ -112,12 +120,25 @@ export default function ProductDetailFull() {
 
         console.log("✅ Produit chargé:", productData);
       } catch (err) {
-        console.error("❌ Erreur lors du chargement:", err);
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement du produit"
-        );
+        console.error("❌ Erreur lors du chargement du produit:", err);
+
+        // Extract detailed error message
+        let errorMessage = "Erreur lors du chargement du produit";
+        if (err instanceof Error) {
+          errorMessage = err.message;
+        } else if (typeof err === 'object' && err !== null) {
+          const errObj = err as any;
+          if (errObj.message) {
+            errorMessage = errObj.message;
+          } else if (errObj.error) {
+            errorMessage = errObj.error;
+          } else if (errObj.details) {
+            errorMessage = errObj.details;
+          }
+        }
+
+        console.error("❌ Message d'erreur complet:", errorMessage);
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

@@ -38,6 +38,8 @@ export async function getProducts(category?: string): Promise<Product[]> {
  */
 export async function getProductById(productId: string): Promise<ProductDetail | null> {
   try {
+    console.log(`🔍 Recherche du produit ${productId} dans Supabase...`);
+
     // Fetch product
     const { data: product, error: productError } = await supabase
       .from('products')
@@ -46,10 +48,22 @@ export async function getProductById(productId: string): Promise<ProductDetail |
       .eq('is_active', true)
       .single();
 
-    if (productError || !product) {
-      console.error('Error fetching product:', productError);
-      return null;
+    if (productError) {
+      console.error('❌ Erreur Supabase:', {
+        code: productError.code,
+        message: productError.message,
+        details: productError.details,
+        hint: productError.hint,
+      });
+      throw new Error(`Supabase Error: ${productError.message}`);
     }
+
+    if (!product) {
+      console.error(`❌ Produit non trouvé: ${productId}`);
+      throw new Error(`Produit avec l'ID "${productId}" n'existe pas`);
+    }
+
+    console.log(`✅ Produit trouvé:`, product);
 
     // Fetch variants
     const { data: variants = [], error: variantsError } = await supabase
@@ -58,7 +72,7 @@ export async function getProductById(productId: string): Promise<ProductDetail |
       .eq('product_id', productId);
 
     if (variantsError) {
-      console.error('Error fetching variants:', variantsError);
+      console.warn('⚠️ Erreur lors du chargement des variantes:', variantsError);
     }
 
     // Fetch patterns
@@ -67,7 +81,7 @@ export async function getProductById(productId: string): Promise<ProductDetail |
       .select('*');
 
     if (patternsError) {
-      console.error('Error fetching patterns:', patternsError);
+      console.warn('⚠️ Erreur lors du chargement des motifs:', patternsError);
     }
 
     return {
@@ -76,8 +90,9 @@ export async function getProductById(productId: string): Promise<ProductDetail |
       patterns: patterns as Pattern[],
     } as ProductDetail;
   } catch (error) {
-    console.error('Error fetching product details:', error);
-    return null;
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error('❌ Erreur lors du chargement du produit:', errorMsg);
+    throw error; // Propagate error with context
   }
 }
 
