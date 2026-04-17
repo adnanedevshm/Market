@@ -94,37 +94,29 @@ export default function ProductDetail() {
       return;
     }
 
-    if (!selectedVariant) {
-      toast.error("Veuillez sélectionner une taille");
-      return;
-    }
-
-    if (!selectedPattern) {
-      toast.error("Veuillez sélectionner un motif");
-      return;
-    }
-
     if (quantity <= 0) {
       toast.error("Quantité invalide");
       return;
     }
 
     // Create cart item
+    // Allow adding to cart even without variants/patterns
     const cartItem = {
       id: crypto.randomUUID(),
       productId: product.id,
       productName: product.name,
-      variantId: selectedVariant.id,
-      variantSize: selectedVariant.size,
-      patternId: selectedPattern.id,
-      patternName: selectedPattern.name,
-      price: selectedVariant.price,
+      variantId: selectedVariant?.id || `variant-${product.id}`,
+      variantSize: selectedVariant?.size || "Défaut",
+      patternId: selectedPattern?.id || "pattern-default",
+      patternName: selectedPattern?.name || "Défaut",
+      price: selectedVariant?.price || product.price || product.basePrice,
       quantity,
-      imageUrl: product.imageUrl,
+      imageUrl: product.image_url || product.imageUrl,
     };
 
     // Add to cart context
     addToCart(cartItem);
+    toast.success(`${quantity} ${product.name} ajouté(s) au panier!`);
   };
 
   const handleToggleFavorite = async () => {
@@ -226,7 +218,7 @@ export default function ProductDetail() {
             {/* Price */}
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold text-blue-600">
-                {(selectedVariant?.price || product.basePrice).toFixed(2)} MAD
+                {(selectedVariant?.price || product.price || product.basePrice).toFixed(2)} MAD
               </span>
               <span className="text-sm text-gray-500">par unité</span>
             </div>

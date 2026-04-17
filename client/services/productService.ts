@@ -48,32 +48,7 @@ export async function getProductById(productId: string): Promise<ProductDetail |
 
     if (mockProduct) {
       console.log(`✅ Produit trouvé:`, mockProduct);
-
-      // Optionally fetch additional data from Supabase (images, reviews)
-      // but don't fail if not available
-      try {
-        const { data: images = [] } = await supabase
-          .from('product_images')
-          .select('*')
-          .eq('product_id', productId)
-          .order('display_order', { ascending: true });
-
-        const { data: reviews = [] } = await supabase
-          .from('product_reviews')
-          .select('*')
-          .eq('product_id', productId)
-          .eq('is_active', true);
-
-        return {
-          ...mockProduct,
-          images: images as any[],
-          reviews: reviews as any[],
-        };
-      } catch (supabaseErr) {
-        // If Supabase fails, return product without additional data
-        console.warn('⚠️ Impossible de charger les images/avis depuis Supabase:', supabaseErr);
-        return mockProduct;
-      }
+      return mockProduct;
     }
 
     // No product found
