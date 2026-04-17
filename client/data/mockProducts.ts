@@ -149,6 +149,101 @@ export const mockProducts: Record<string, ProductDetail> = {
     image_url: "https://via.placeholder.com/400x400?text=طباعة+القمصان",
   },
 
+  // Medical Kits
+  "kit1": {
+    id: "kit1",
+    name: "حزمة الإسعافات الأولية 1",
+    title: "حزمة الإسعافات الأولية 1",
+    description: "حزمة إسعافات أولية شاملة ومعقمة. تحتوي على الأساسيات الطبية.",
+    detailed_description:
+      "حزمة إسعافات أولية شاملة ومعقمة. تحتوي على الأساسيات الطبية. معتمدة وآمنة. مناسبة للعائلات والمؤسسات.",
+    price: 300,
+    basePrice: 300,
+    category: "Medical Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=حزمة+إسعافات+1",
+    image_url: "https://via.placeholder.com/400x400?text=حزمة+إسعافات+1",
+  },
+  "kit2": {
+    id: "kit2",
+    name: "حزمة الإسعافات الأولية 2",
+    title: "حزمة الإسعافات الأولية 2",
+    description: "نسخة محسّنة من حزمة الإسعافات. أدوات إضافية وأكمل.",
+    detailed_description:
+      "نسخة محسّنة من حزمة الإسعافات. أدوات إضافية وأكمل. جودة طبية عالية. مثالية للرحلات والفعاليات.",
+    price: 450,
+    basePrice: 450,
+    category: "Medical Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=حزمة+إسعافات+2",
+    image_url: "https://via.placeholder.com/400x400?text=حزمة+إسعافات+2",
+  },
+  "kit3": {
+    id: "kit3",
+    name: "حزمة الإسعافات الأولية 3",
+    title: "حزمة الإسعافات الأولية 3",
+    description: "حزمة إسعافات متقدمة وشاملة. جميع المعدات الضرورية.",
+    detailed_description:
+      "حزمة إسعافات متقدمة وشاملة. جميع المعدات الضرورية. معقمة بشكل كامل. للاستخدام المهني والعائلي.",
+    price: 600,
+    basePrice: 600,
+    category: "Medical Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=حزمة+إسعافات+3",
+    image_url: "https://via.placeholder.com/400x400?text=حزمة+إسعافات+3",
+  },
+
+  // Scout Kits
+  "kit_de_feu": {
+    id: "kit_de_feu",
+    name: "حزمة النار",
+    title: "حزمة النار",
+    description: "حزمة متكاملة لإشعال النار. تحتوي على مواد قابلة للاشتعال.",
+    detailed_description:
+      "حزمة متكاملة لإشعال النار. تحتوي على مواد قابلة للاشتعال وأدوات آمنة. مناسبة للمخيمات والرحلات البرية.",
+    price: 200,
+    basePrice: 200,
+    category: "Scout Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=حزمة+النار",
+    image_url: "https://via.placeholder.com/400x400?text=حزمة+النار",
+  },
+  "kit_de_secours": {
+    id: "kit_de_secours",
+    name: "صندوق الإسعافات الأولية",
+    title: "صندوق الإسعافات الأولية",
+    description: "صندوق إسعافات أولية شامل ومعقم. يحتوي على أدوات طبية.",
+    detailed_description:
+      "صندوق إسعافات أولية شامل ومعقم. يحتوي على أدوات طبية أساسية وضمادات. معتمد وآمن للاستخدام الفوري.",
+    price: 350,
+    basePrice: 350,
+    category: "Scout Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=صندوق+الإسعافات",
+    image_url: "https://via.placeholder.com/400x400?text=صندوق+الإسعافات",
+  },
+  "kit_de_cuisine": {
+    id: "kit_de_cuisine",
+    name: "حزمة الطهي",
+    title: "حزمة الطهي",
+    description: "مجموعة أدوات الطهي المتنقلة. تحتوي على أواني وملاعق.",
+    detailed_description:
+      "مجموعة أدوات الطهي المتنقلة. تحتوي على أواني وملاعق وشوك. خفيفة الوزن وقوية. مثالية للطهي في الطبيعة.",
+    price: 280,
+    basePrice: 280,
+    category: "Scout Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=حزمة+الطهي",
+    image_url: "https://via.placeholder.com/400x400?text=حزمة+الطهي",
+  },
+  "kit24": {
+    id: "kit24",
+    name: "حزمة 24 ساعة",
+    title: "حزمة 24 ساعة",
+    description: "حزمة شاملة لرحلة 24 ساعة. تحتوي على كل ما تحتاجه.",
+    detailed_description:
+      "حزمة شاملة لرحلة 24 ساعة. تحتوي على كل ما تحتاجه للبقاء والراحة. جودة عالية وشاملة.",
+    price: 800,
+    basePrice: 800,
+    category: "Scout Kits",
+    imageUrl: "https://via.placeholder.com/400x400?text=حزمة+24+ساعة",
+    image_url: "https://via.placeholder.com/400x400?text=حزمة+24+ساعة",
+  },
+
   // Default fallback
   "default": {
     id: "default",
