@@ -36,77 +36,52 @@ export async function getProducts(category?: string): Promise<Product[]> {
 }
 
 /**
- * Fetch a single product with its variants and patterns
- * Falls back to mock products if not found in Supabase
+ * Fetch a single product from mock/static data
+ * Products are stored as static data, not in Supabase
  */
 export async function getProductById(productId: string): Promise<ProductDetail | null> {
   try {
-    console.log(`🔍 Recherche du produit ${productId} dans Supabase...`);
+    console.log(`🔍 Chargement du produit ${productId} depuis données statiques...`);
 
-    // Fetch product from Supabase
-    const { data: product, error: productError } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', productId)
-      .eq('is_active', true)
-      .single();
-
-    // If product found in Supabase, use it
-    if (!productError && product) {
-      console.log(`✅ Produit trouvé dans Supabase:`, product);
-
-      // Fetch variants
-      const { data: variants = [], error: variantsError } = await supabase
-        .from('variants')
-        .select('*')
-        .eq('product_id', productId);
-
-      if (variantsError) {
-        console.warn('⚠️ Erreur lors du chargement des variantes:', variantsError);
-      }
-
-      // Fetch patterns
-      const { data: patterns = [], error: patternsError } = await supabase
-        .from('patterns')
-        .select('*');
-
-      if (patternsError) {
-        console.warn('⚠️ Erreur lors du chargement des motifs:', patternsError);
-      }
-
-      return {
-        ...product,
-        variants: variants as Variant[],
-        patterns: patterns as Pattern[],
-      } as ProductDetail;
-    }
-
-    // If product not found in Supabase, try mock products
-    console.warn(`⚠️ Produit non trouvé dans Supabase: ${productId}`);
-    console.log(`🔄 Utilisation des données mockées pour ${productId}...`);
-
+    // Get product from static mock data
     const mockProduct = getMockProduct(productId);
+
     if (mockProduct) {
-      console.log(`✅ Produit mock trouvé:`, mockProduct);
-      return mockProduct;
+      console.log(`✅ Produit trouvé:`, mockProduct);
+
+      // Optionally fetch additional data from Supabase (images, reviews)
+      // but don't fail if not available
+      try {
+        const { data: images = [] } = await supabase
+          .from('product_images')
+          .select('*')
+          .eq('product_id', productId)
+          .order('display_order', { ascending: true });
+
+        const { data: reviews = [] } = await supabase
+          .from('product_reviews')
+          .select('*')
+          .eq('product_id', productId)
+          .eq('is_active', true);
+
+        return {
+          ...mockProduct,
+          images: images as any[],
+          reviews: reviews as any[],
+        };
+      } catch (supabaseErr) {
+        // If Supabase fails, return product without additional data
+        console.warn('⚠️ Impossible de charger les images/avis depuis Supabase:', supabaseErr);
+        return mockProduct;
+      }
     }
 
-    // No product found anywhere
-    console.error(`❌ Produit non trouvé: ${productId} (Supabase ni mock)`);
+    // No product found
+    console.error(`❌ Produit non trouvé: ${productId}`);
     return null;
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     console.error('❌ Erreur lors du chargement du produit:', errorMsg);
-
-    // Try fallback to mock product on error
-    console.log(`🔄 Fallback aux données mockées après erreur...`);
-    const mockProduct = getMockProduct(productId);
-    if (mockProduct) {
-      console.log(`✅ Fallback réussi, utilisation du produit mock:`, mockProduct);
-      return mockProduct;
-    }
-
-    // If mock also fails, return null
     return null;
   }
 }

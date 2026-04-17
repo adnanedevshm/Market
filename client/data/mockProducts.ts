@@ -259,6 +259,30 @@ export const mockProducts: Record<string, ProductDetail> = {
   },
 };
 
+/**
+ * Get a product by ID, with auto-generation of missing products
+ */
 export function getMockProduct(productId: string): ProductDetail | null {
-  return mockProducts[productId] || null;
+  // Check if product exists in mock data
+  if (mockProducts[productId]) {
+    return mockProducts[productId];
+  }
+
+  // Auto-generate product for IDs not explicitly defined
+  // This allows the app to handle any product ID gracefully
+  const autoProduct: ProductDetail = {
+    id: productId,
+    name: productId.replace(/-/g, " "),
+    title: productId.replace(/-/g, " "),
+    description: `Produit: ${productId}`,
+    detailed_description: `Produit: ${productId}. Pour plus de détails, veuillez nous contacter.`,
+    price: 0,
+    basePrice: 0,
+    category: "Produits",
+    imageUrl: `https://via.placeholder.com/400x400?text=${encodeURIComponent(productId)}`,
+    image_url: `https://via.placeholder.com/400x400?text=${encodeURIComponent(productId)}`,
+  };
+
+  console.log(`⚠️ Produit auto-généré pour ${productId}`);
+  return autoProduct;
 }

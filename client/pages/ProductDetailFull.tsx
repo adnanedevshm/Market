@@ -89,30 +89,13 @@ export default function ProductDetailFull() {
 
         setProduct(productData);
 
-        // Try to fetch product images (non-blocking)
-        try {
-          const imagesResponse = await fetch(`/api/products/${id}/images`);
-          if (imagesResponse.ok) {
-            const imagesJson = await imagesResponse.json();
-            if (imagesJson.data) {
-              setImages(imagesJson.data);
-            }
-          }
-        } catch (imgErr) {
-          console.warn("⚠️ Impossible de charger les images:", imgErr);
+        // Load images and reviews from product data if available
+        if (productData.images) {
+          setImages(productData.images);
         }
 
-        // Try to fetch product reviews (non-blocking)
-        try {
-          const reviewsResponse = await fetch(`/api/products/${id}/reviews`);
-          if (reviewsResponse.ok) {
-            const reviewsJson = await reviewsResponse.json();
-            if (reviewsJson.data) {
-              setReviews(reviewsJson.data);
-            }
-          }
-        } catch (revErr) {
-          console.warn("⚠️ Impossible de charger les avis:", revErr);
+        if (productData.reviews) {
+          setReviews(productData.reviews);
         }
 
         // Set initial dynamic price
