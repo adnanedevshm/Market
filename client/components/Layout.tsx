@@ -140,40 +140,164 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-8 mt-12">
+      <footer className="bg-black text-white py-12 mt-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+            {/* About Platform */}
             <div>
-              <h3 className="text-lg font-bold mb-4">منصة SHM</h3>
-              <p className="text-gray-400 text-sm">
-                المعدات، المشاريع، والابتكار
+              <h3 className="text-lg font-bold mb-4">🏢 عن المنصة</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                منصة متخصصة في المعدات والمشاريع والخدمات الابتكارية
               </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4">التواصل</h3>
-              <a
-                href="https://wa.me/212675202336"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors text-sm"
+              <Link
+                to="/about"
+                className="text-gray-400 hover:text-white transition-colors text-sm block"
               >
-                WhatsApp: +212 6 75 20 23 36
-              </a>
+                تفاصيل أكثر →
+              </Link>
             </div>
+
+            {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-bold mb-4">الروابط</h3>
+              <h3 className="text-lg font-bold mb-4">🔗 روابط سريعة</h3>
               <div className="space-y-2 text-sm">
                 <Link
                   to="/"
                   className="block text-gray-400 hover:text-white transition-colors"
                 >
-                  الرئيسية
+                  ❋ الرئيسية
+                </Link>
+                <Link
+                  to="/shm"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ SHM
+                </Link>
+                <Link
+                  to="/scout-camping"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ الكشافة والتخييم
+                </Link>
+                <Link
+                  to="/projects"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ المشاريع
+                </Link>
+                <Link
+                  to="/medical"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ المعدات الطبية
+                </Link>
+                <Link
+                  to="/packs"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ الحزم والعروض
                 </Link>
               </div>
             </div>
+
+            {/* Account Links */}
+            <div>
+              <h3 className="text-lg font-bold mb-4">👤 حسابي</h3>
+              <div className="space-y-2 text-sm">
+                <Link
+                  to="/login"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ دخول
+                </Link>
+                <Link
+                  to="/register"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ إنشاء حساب
+                </Link>
+                <Link
+                  to="/favorites"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ المفضلة
+                </Link>
+                <Link
+                  to="/cart"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ السلة
+                </Link>
+                <Link
+                  to="/donation"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ التبرع
+                </Link>
+              </div>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <h3 className="text-lg font-bold mb-4">⚖️ قانوني</h3>
+              <div className="space-y-2 text-sm">
+                <Link
+                  to="/privacy"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ سياسة الخصوصية
+                </Link>
+                <Link
+                  to="/security"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ سياسة الأمان
+                </Link>
+                <a
+                  href="#"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ الشروط والأحكام
+                </a>
+                <a
+                  href="#"
+                  className="block text-gray-400 hover:text-white transition-colors"
+                >
+                  ❋ سياسة الاسترجاع
+                </a>
+              </div>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="text-lg font-bold mb-4">📞 التواصل</h3>
+              <div className="space-y-3 text-sm">
+                <a
+                  href="https://wa.me/212675202336"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-gray-400 hover:text-green-400 transition-colors"
+                >
+                  💬 WhatsApp<br />
+                  <span className="text-xs">+212 6 75 20 23 36</span>
+                </a>
+                <a
+                  href="mailto:contact@shm.ma"
+                  className="block text-gray-400 hover:text-blue-400 transition-colors"
+                >
+                  📧 البريد الإلكتروني<br />
+                  <span className="text-xs">contact@shm.ma</span>
+                </a>
+              </div>
+            </div>
           </div>
-          <div className="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm">
+
+          {/* Copyright */}
+          <div className="text-center text-gray-400 text-sm">
             <p>&copy; 2024 SHM Marketplace. جميع الحقوق محفوظة.</p>
+            <p className="mt-2 text-xs">
+              تم التطوير بـ ❤️ بواسطة فريق SHM
+            </p>
           </div>
         </div>
       </footer>

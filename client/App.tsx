@@ -71,6 +71,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 // Generic Product Detail Page
 import ProductDetail from "./pages/ProductDetail";
 
+// Information Pages
+import About from "./pages/About";
+import Privacy from "./pages/Privacy";
+import Security from "./pages/Security";
+
 // Favorites Page
 import Favorites from "./pages/Favorites";
 
@@ -151,6 +156,11 @@ const App = () => (
 
               {/* Product Detail Route (Generic) */}
               <Route path="/product/:id" element={<ProductDetail />} />
+
+              {/* Information Routes */}
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/security" element={<Security />} />
 
               {/* Favorites Route */}
               <Route path="/favorites" element={<Favorites />} />

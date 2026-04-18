@@ -63,9 +63,8 @@ async function getPayPalAccessToken(): Promise<string | null> {
     const response = await fetch(tokenUrl, {
       method: "POST",
       headers: {
-        "Authorization": `Basic ${authString}`,
         "Content-Type": "application/x-www-form-urlencoded",
-        "Accept": "application/json",
+        "Authorization": `Basic ${authString}`,
       },
       body: "grant_type=client_credentials",
     });

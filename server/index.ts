@@ -5,6 +5,12 @@ import { handleDemo } from "./routes/demo";
 import { handleOrder } from "./routes/order";
 import { handlePayPalOrder, verifyPayPalOrder } from "./routes/paypal";
 import { handleDonation } from "./routes/donation";
+import {
+  getProductImages,
+  getProductReviews,
+  searchProducts,
+  getProductVariants,
+} from "./routes/products";
 
 export function createServer() {
   const app = express();
@@ -21,6 +27,12 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Product routes - REAL data from Supabase
+  app.get("/api/products/search", searchProducts);
+  app.get("/api/products/:id/images", getProductImages);
+  app.get("/api/products/:id/reviews", getProductReviews);
+  app.get("/api/products/:id/variants", getProductVariants);
 
   // Order creation route - REAL database insertion + notifications
   app.post("/api/orders", handleOrder);

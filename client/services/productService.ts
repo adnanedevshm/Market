@@ -1,8 +1,10 @@
 /**
  * Product Service - Handles all product-related operations with Supabase
+ * Includes fallback to mock products for simple string IDs
  */
 
 import { supabase } from '@/lib/supabase';
+import { getMockProduct } from '@/data/mockProducts';
 import type { Product, ProductDetail, Variant, Pattern } from '@/types';
 
 /**
@@ -34,49 +36,27 @@ export async function getProducts(category?: string): Promise<Product[]> {
 }
 
 /**
- * Fetch a single product with its variants and patterns
+ * Fetch a single product from mock/static data
+ * Products are stored as static data, not in Supabase
  */
 export async function getProductById(productId: string): Promise<ProductDetail | null> {
   try {
-    // Fetch product
-    const { data: product, error: productError } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', productId)
-      .eq('is_active', true)
-      .single();
+    console.log(`🔍 Chargement du produit ${productId} depuis données statiques...`);
 
-    if (productError || !product) {
-      console.error('Error fetching product:', productError);
-      return null;
+    // Get product from static mock data
+    const mockProduct = getMockProduct(productId);
+
+    if (mockProduct) {
+      console.log(`✅ Produit trouvé:`, mockProduct);
+      return mockProduct;
     }
 
-    // Fetch variants
-    const { data: variants = [], error: variantsError } = await supabase
-      .from('variants')
-      .select('*')
-      .eq('product_id', productId);
-
-    if (variantsError) {
-      console.error('Error fetching variants:', variantsError);
-    }
-
-    // Fetch patterns
-    const { data: patterns = [], error: patternsError } = await supabase
-      .from('patterns')
-      .select('*');
-
-    if (patternsError) {
-      console.error('Error fetching patterns:', patternsError);
-    }
-
-    return {
-      ...product,
-      variants: variants as Variant[],
-      patterns: patterns as Pattern[],
-    } as ProductDetail;
+    // No product found
+    console.error(`❌ Produit non trouvé: ${productId}`);
+    return null;
   } catch (error) {
-    console.error('Error fetching product details:', error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error('❌ Erreur lors du chargement du produit:', errorMsg);
     return null;
   }
 }

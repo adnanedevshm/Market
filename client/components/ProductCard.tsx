@@ -23,7 +23,7 @@ export default function ProductCard({
   price,
   slug,
 }: ProductCardProps) {
-  const productLink = `/products/${id}`;
+  const productLink = `/product/${id}`;
 
   return (
     <div className="shm-glow bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
