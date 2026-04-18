@@ -26,9 +26,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     const initializeFavorites = async () => {
       try {
         if (user) {
-          // Load from Supabase for authenticated users (using correct 'favorites' table)
+          // Load from Supabase for authenticated users (using correct 'user_favorites' table)
           const { data, error } = await supabase
-            .from("favorites")
+            .from("user_favorites")
             .select("product_id")
             .eq("user_id", user.id);
 
@@ -66,8 +66,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     async (productId: string) => {
       try {
         if (user) {
-          // Add to Supabase (using correct 'favorites' table)
-          const { error } = await supabase.from("favorites").insert([
+          // Add to Supabase (using correct 'user_favorites' table)
+          const { error } = await supabase.from("user_favorites").insert([
             {
               user_id: user.id,
               product_id: productId,
@@ -102,9 +102,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     async (productId: string) => {
       try {
         if (user) {
-          // Remove from Supabase (using correct 'favorites' table)
+          // Remove from Supabase (using correct 'user_favorites' table)
           const { error } = await supabase
-            .from("favorites")
+            .from("user_favorites")
             .delete()
             .eq("user_id", user.id)
             .eq("product_id", productId);
